@@ -66,9 +66,11 @@ This project builds a data pipeline using **Apache Airflow** and **PostgreSQL** 
 
     Trigger DAGs via the Airflow UI or CLI.
     Available DAGs in order of operation:
+    If you wish to complete all the DAGs in correct order, run full_pipeline DAG but they can also be individually triggered.
     1. data_ingestion_dag
     2. remove_duplicates_dag
     3. transform_data_dag
     4. business_logic_dag
+    
   
 
