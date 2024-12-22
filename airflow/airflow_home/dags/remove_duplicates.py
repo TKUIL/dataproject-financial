@@ -20,7 +20,7 @@ with DAG(
     # Define tasks for each table
     remove_duplicates_mutual_funds = PostgresOperator(
         task_id='remove_duplicates_mutual_funds',
-        postgres_conn_id='my_postgres_conn',  
+        postgres_conn_id='my_postgres_conn',
         sql="""
             DELETE FROM mutual_funds
             WHERE ctid NOT IN (
@@ -57,27 +57,81 @@ with DAG(
         """,
     )
 
-    remove_duplicates_mutual_fund_prices_a_e = PostgresOperator(
-        task_id='remove_duplicates_mutual_fund_prices_a_e',
+    # A-E group operators
+    remove_duplicates_mutual_fund_prices_a_b = PostgresOperator(
+        task_id='remove_duplicates_mutual_fund_prices_a_b',
         postgres_conn_id='my_postgres_conn',
         sql="""
-            DELETE FROM mutual_fund_prices_a_e
+            DELETE FROM mutual_fund_prices_a_b
             WHERE ctid NOT IN (
                 SELECT MIN(ctid)
-                FROM mutual_fund_prices_a_e
+                FROM mutual_fund_prices_a_b
                 GROUP BY fund_symbol, price_date
             );
         """,
     )
 
-    remove_duplicates_mutual_fund_prices_f_k = PostgresOperator(
-        task_id='remove_duplicates_mutual_fund_prices_f_k',
+    remove_duplicates_mutual_fund_prices_c_d = PostgresOperator(
+        task_id='remove_duplicates_mutual_fund_prices_c_d',
         postgres_conn_id='my_postgres_conn',
         sql="""
-            DELETE FROM mutual_fund_prices_f_k
+            DELETE FROM mutual_fund_prices_c_d
             WHERE ctid NOT IN (
                 SELECT MIN(ctid)
-                FROM mutual_fund_prices_f_k
+                FROM mutual_fund_prices_c_d
+                GROUP BY fund_symbol, price_date
+            );
+        """,
+    )
+
+    remove_duplicates_mutual_fund_prices_e = PostgresOperator(
+        task_id='remove_duplicates_mutual_fund_prices_e',
+        postgres_conn_id='my_postgres_conn',
+        sql="""
+            DELETE FROM mutual_fund_prices_e
+            WHERE ctid NOT IN (
+                SELECT MIN(ctid)
+                FROM mutual_fund_prices_e
+                GROUP BY fund_symbol, price_date
+            );
+        """,
+    )
+
+    # F-K group operators
+    remove_duplicates_mutual_fund_prices_f_g = PostgresOperator(
+        task_id='remove_duplicates_mutual_fund_prices_f_g',
+        postgres_conn_id='my_postgres_conn',
+        sql="""
+            DELETE FROM mutual_fund_prices_f_g
+            WHERE ctid NOT IN (
+                SELECT MIN(ctid)
+                FROM mutual_fund_prices_f_g
+                GROUP BY fund_symbol, price_date
+            );
+        """,
+    )
+
+    remove_duplicates_mutual_fund_prices_h_i = PostgresOperator(
+        task_id='remove_duplicates_mutual_fund_prices_h_i',
+        postgres_conn_id='my_postgres_conn',
+        sql="""
+            DELETE FROM mutual_fund_prices_h_i
+            WHERE ctid NOT IN (
+                SELECT MIN(ctid)
+                FROM mutual_fund_prices_h_i
+                GROUP BY fund_symbol, price_date
+            );
+        """,
+    )
+
+    remove_duplicates_mutual_fund_prices_j_k = PostgresOperator(
+        task_id='remove_duplicates_mutual_fund_prices_j_k',
+        postgres_conn_id='my_postgres_conn',
+        sql="""
+            DELETE FROM mutual_fund_prices_j_k
+            WHERE ctid NOT IN (
+                SELECT MIN(ctid)
+                FROM mutual_fund_prices_j_k
                 GROUP BY fund_symbol, price_date
             );
         """,
@@ -114,8 +168,12 @@ with DAG(
         remove_duplicates_mutual_funds,
         remove_duplicates_etfs,
         remove_duplicates_etf_prices,
-        remove_duplicates_mutual_fund_prices_a_e,
-        remove_duplicates_mutual_fund_prices_f_k,
+        remove_duplicates_mutual_fund_prices_a_b,
+        remove_duplicates_mutual_fund_prices_c_d,
+        remove_duplicates_mutual_fund_prices_e,
+        remove_duplicates_mutual_fund_prices_f_g,
+        remove_duplicates_mutual_fund_prices_h_i,
+        remove_duplicates_mutual_fund_prices_j_k,
         remove_duplicates_mutual_fund_prices_l_p,
         remove_duplicates_mutual_fund_prices_q_z
     ]

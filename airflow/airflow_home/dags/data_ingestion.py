@@ -23,10 +23,10 @@ with DAG(
 
     def ingest_file_to_postgres(filename, table_name):
         # Set up the database connection
-        engine = create_engine('postgresql+psycopg2://airflow:airflow@postgres/airflow')
+        engine = create_engine('postgresql+psycopg2://airflow:airflow@localhost:5432/airflow')
 
         # Read the CSV file into a Pandas DataFrame
-        df = pd.read_csv(f'/opt/airflow/dags/data/{filename}')
+        df = pd.read_csv(f'/home/tku/Projects/dataproject/dataproject-financial/airflow/airflow_home/dags/data/{filename}')
 
         # Write the DataFrame to PostgreSQL
         df.to_sql(table_name, engine, if_exists='replace', index=False)
@@ -45,16 +45,42 @@ with DAG(
         op_kwargs={'filename': 'ETFs.csv', 'table_name': 'etfs'},
     )
 
-    ingest_mutual_fund_prices_a_e = PythonOperator(
-        task_id='ingest_mutual_fund_prices_a_e',
+    # A-E group operators
+    ingest_mutual_fund_prices_a_b = PythonOperator(
+        task_id='ingest_mutual_fund_prices_a_b',
         python_callable=ingest_file_to_postgres,
-        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022 - A-E.csv', 'table_name': 'mutual_fund_prices_a_e'},
+        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022_A_B.csv', 'table_name': 'mutual_fund_prices_a_b'},
     )
 
-    ingest_mutual_fund_prices_f_k = PythonOperator(
-        task_id='ingest_mutual_fund_prices_f_k',
+    ingest_mutual_fund_prices_c_d = PythonOperator(
+        task_id='ingest_mutual_fund_prices_c_d',
         python_callable=ingest_file_to_postgres,
-        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022 - F-K.csv', 'table_name': 'mutual_fund_prices_f_k'},
+        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022_C_D.csv', 'table_name': 'mutual_fund_prices_c_d'},
+    )
+
+    ingest_mutual_fund_prices_e = PythonOperator(
+        task_id='ingest_mutual_fund_prices_e',
+        python_callable=ingest_file_to_postgres,
+        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022_E.csv', 'table_name': 'mutual_fund_prices_e'},
+    )
+
+    # F-K group operators
+    ingest_mutual_fund_prices_f_g = PythonOperator(
+        task_id='ingest_mutual_fund_prices_f_g',
+        python_callable=ingest_file_to_postgres,
+        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022_F_G.csv', 'table_name': 'mutual_fund_prices_f_g'},
+    )
+
+    ingest_mutual_fund_prices_h_i = PythonOperator(
+        task_id='ingest_mutual_fund_prices_h_i',
+        python_callable=ingest_file_to_postgres,
+        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022_H_I.csv', 'table_name': 'mutual_fund_prices_h_i'},
+    )
+
+    ingest_mutual_fund_prices_j_k = PythonOperator(
+        task_id='ingest_mutual_fund_prices_j_k',
+        python_callable=ingest_file_to_postgres,
+        op_kwargs={'filename': 'MutualFund_prices_2021_to_2022_J_K.csv', 'table_name': 'mutual_fund_prices_j_k'},
     )
 
     ingest_mutual_fund_prices_l_p = PythonOperator(
@@ -71,7 +97,7 @@ with DAG(
 
     ingest_mutual_funds = PythonOperator(
         task_id='ingest_mutual_funds',
-        python_callable=ingest_file_to_postgres, 
+        python_callable=ingest_file_to_postgres,
         op_kwargs={'filename': 'MutualFunds.csv', 'table_name': 'mutual_funds'},
     )
 
@@ -80,8 +106,12 @@ with DAG(
         ingest_etf_prices
         >> ingest_etfs
         >> [
-            ingest_mutual_fund_prices_a_e,
-            ingest_mutual_fund_prices_f_k,
+            ingest_mutual_fund_prices_a_b,
+            ingest_mutual_fund_prices_c_d,
+            ingest_mutual_fund_prices_e,
+            ingest_mutual_fund_prices_f_g,
+            ingest_mutual_fund_prices_h_i,
+            ingest_mutual_fund_prices_j_k,
             ingest_mutual_fund_prices_l_p,
             ingest_mutual_fund_prices_q_z,
         ]
