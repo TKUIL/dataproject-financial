@@ -40,12 +40,12 @@ This project builds a data pipeline using **Apache Airflow** and **PostgreSQL** 
     python3 datasetscript.py # This downloads the dataset from Kaggle (requires Kaggle API key)
     python3 filter_years.py # This is used to split the dataset so it's easier to process
    
-5. **Set up Git LFS (if required):**
+4. **Set up Git LFS (if required):**
    ```bash
    git lfs install
    git lfs pull
 
-6. **Set up Git LFS (if required):**
+5. **Start apache airflow:**
    ```bash
    Initialize Airflow DB:
     
