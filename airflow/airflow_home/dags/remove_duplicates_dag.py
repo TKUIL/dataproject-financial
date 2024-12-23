@@ -1,11 +1,13 @@
 from airflow import DAG
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from datetime import datetime
+from airflow.utils.dates import days_ago
 
 # Default arguments for the DAG
 default_args = {
-    'start_date': datetime(2024, 12, 20),
-    'catchup': False,
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'retries': 1,
+    'start_date': days_ago(1),
 }
 
 # Define the DAG

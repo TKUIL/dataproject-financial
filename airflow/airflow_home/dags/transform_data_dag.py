@@ -1,6 +1,6 @@
 from airflow import DAG
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from datetime import datetime
+from airflow.utils.dates import days_ago
 
 default_args = {
     'owner': 'airflow', 
@@ -9,11 +9,11 @@ default_args = {
 }
 
 with DAG(
-    dag_id='transform_financial_data',
+    dag_id='transform_data_dag',
     default_args=default_args,
     description='Transform ETF and mutual fund data',
     schedule_interval=None, 
-    start_date=datetime(2023, 12, 22),
+    start_date=days_ago(1),
     catchup=False,
 ) as dag:
 

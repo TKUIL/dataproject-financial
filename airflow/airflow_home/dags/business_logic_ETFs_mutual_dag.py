@@ -11,7 +11,7 @@ default_args = {
 
 # Define the DAG
 with DAG(
-    dag_id='business_logic_ETFs_mutual',
+    dag_id='business_logic_ETFs_mutual_dag',
     default_args=default_args,
     description='A DAG to merge ETFs and Mutual Funds data',
     schedule_interval=None,
