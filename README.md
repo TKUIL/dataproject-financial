@@ -35,12 +35,17 @@ This project builds a data pipeline using **Apache Airflow** and **PostgreSQL** 
     source .venv/bin/activate
     pip install -r requirements.txt
    
-2. **Set up Git LFS (if required):**
+3. **Get the data from Kaggle API:**
+   ```bash
+    python3 datasetscript.py # This downloads the dataset from Kaggle (requires Kaggle API key)
+    python3 filter_years.py # This is used to split the dataset so it's easier to process
+   
+5. **Set up Git LFS (if required):**
    ```bash
    git lfs install
    git lfs pull
 
-2. **Set up Git LFS (if required):**
+6. **Set up Git LFS (if required):**
    ```bash
    Initialize Airflow DB:
     
@@ -61,9 +66,11 @@ This project builds a data pipeline using **Apache Airflow** and **PostgreSQL** 
 
     Trigger DAGs via the Airflow UI or CLI.
     Available DAGs in order of operation:
+    If you wish to complete all the DAGs in correct order, run full_pipeline DAG but they can also be individually triggered.
     1. data_ingestion_dag
     2. remove_duplicates_dag
     3. transform_data_dag
     4. business_logic_dag
+    
   
 
